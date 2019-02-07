@@ -176,18 +176,47 @@ See [here](ssh.md) for different types of SSH connection with respect to your OS
 
 1. What is the ``grep``command?
 
+Grep command is used to search files for lines that match a given pattern [1].
+
 2. What is the meaning of ``#!/bin/python`` at the start of scripts?
+
+The command ``#!/bin/python`` indicates that the file is a script and it is necessary to execute that script using python as interpreter.
 
 3. Download using ``wget`` the [*bsds500*](https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/grouping/resources.html#bsds500) image segmentation database, and decompress it using ``tar`` (keep it in you hard drive, we will come back over this data in a few weeks).
  
+![](Lab1_Images/Lab1P3.1.jpg)
+![](Lab1_Images/Lab1P3.2.jpg)
+
 4. What is the disk size of the uncompressed dataset, How many images are in the directory 'BSR/BSDS500/data/images'?
  
+To get the disk size of the uncompressed dataset, the command ``du`` and the option ``-hs`` was used in order to get the file size in Mb. Additionally, using the option ``-h`` the disk size of the images folder was obtained like the size for the train, test and validation sets. The disk size of the uncompressed dataset is 73M.
+![](Lab1_Images/Lab1P4.1.1.jpg)
+![](Lab1_Images/Lab1P4.1.jpg)
+To count the number of images in the specifed directory the command ``find`` was used. This command look for all the files that have .jpg extension in their names. Once found, the command ``wc`` and the option ``-l`` was used to count the number of lines, which correspond to the number of images in the dataset.
+![](Lab1_Images/Lab1P4.2.jpg)
+
 5. What are all the different resolutions? What is their format? Tip: use ``awk``, ``sort``, ``uniq`` 
+
+First, the procedure starts by finding all the images with command ``find`` as shown before. Using command ``grep`` the files that correspond to the images and all their features were obtained. Then, the ``awk`` command was used to extract the second column, which corresponds to the format of the file, and using the command ``uniq`` we avoid repeating the format. As a result, it is shown that the format is .JPEG.
+![](Lab1_Images/Lab1P5.1.jpg)
+Secondly, similarly to the algorithm employed for the format, the resolution of the images was obtained. By using ``awk`` command third column, which have the data related to the resolution, was extracted. Since there are different resolutions and the images were not organized it is necessary to use the ``sort`` command. This is because, for example, if we have two resolutions A and B and the first three images have resolution A, the fourth and fifth images have resolution B and the sixth have resolution A, the ``uniq`` command will give us that the resolutions are A, B and A, so if we sort the data in the column extracted and the applied ``uniq`` command we will obtained only the two resolutions A and B.
+![](Lab1_Images/Lab1P5.2.jpg) 
 
 6. How many of them are in *landscape* orientation (opposed to *portrait*)? Tip: use ``awk`` and ``cut``
  
+To determine the number of images that are in landscape orientation the data related to the resolution of the images was obtained in similar way to the previous question. The command ``cut`` and the option ``-d`` was used to extract the text previous to the delimiter specified 'x'. Since the resolutions are 321x481 and 481x321, item that was found previously, the command ``grep`` was used to get only the lines that have '481'. These files correspond to the images in landscape orientation, in this case, 348.
+![](Lab1_Images/Lab1P6.1.jpg)
+
 7. Crop all images to make them square (256x256) and save them in a different folder. Tip: do not forget about  [imagemagick](http://www.imagemagick.org/script/index.php).
 
+The command ``convert`` was used to crop the images[2]. Since it was not possible to convert all images at once, it was executed a loop in the images folder. In each of the iterations, ``grep`` command was used to get the images. To each image, the command ``convert`` and the option ``-resize`` to crop the images to the specifed size 256x256. The '!' element at the end of the size was used to force the image to acquire that size.
+![](Lab1_Images/Lab1P7.1.jpg)
+![](Lab1_Images/Lab1P7.2.jpg)
+
+8. References
+
+[1] SS64, "grep Man Page - Linux - SS64.com", Ss64.com. [Online]. Available: https://ss64.com/bash/grep.html. [Accessed: 07- Feb- 2019].
+[2] J. Haas, "Convert, Resize and Alter Images Using the Linux Convert Command", Lifewire, 2018. [Online]. Available: https://www.lifewire.com/convert-linux-command-unix-command-4097060. [Accessed: 07- Feb- 2019].
 
 # Report
 
