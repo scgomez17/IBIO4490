@@ -184,8 +184,8 @@ The command ``#!/bin/python`` indicates that the file is a script and it is nece
 
 3. Download using ``wget`` the [*bsds500*](https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/grouping/resources.html#bsds500) image segmentation database, and decompress it using ``tar`` (keep it in you hard drive, we will come back over this data in a few weeks).
  
-![](Lab1_Images/Lab1P3.1.jpg)
-![](Lab1_Images/Lab1P3.2.jpg)
+![](Lab1_Images/Lab1P3.1.JPG)
+![](Lab1_Images/Lab1P3.2.JPG)
 
 4. What is the disk size of the uncompressed dataset, How many images are in the directory 'BSR/BSDS500/data/images'?
  
