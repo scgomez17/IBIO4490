@@ -1,5 +1,7 @@
 # Textons 
 
+Important! python files run.py, test.py and demo.py are in python folder with the necessary files to executed.
+
 In this lab you will use a strategy to represent images using Textons. Then you will train, and evaluate a classifier based on the texton representation. 
 
 Try to develop quality code so that you can reuse it in the following labs.
