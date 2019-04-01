@@ -37,15 +37,15 @@
 % This should work on 32 and 64 bit versions of Windows, MacOS, and Linux
 close all
 %clear
-run('vlfeat-0.9.21/toolbox/vl_setup')
+%crun('vlfeat-0.9.21/toolbox/vl_setup')
 
 [~,~,~] = mkdir('visualizations');
 
 data_path = '../data/'; %change if you want to work with a network copy
 train_path_pos = fullfile(data_path, 'caltech_faces/Caltech_CropFaces'); %Positive training examples. 36x36 head crops
 non_face_scn_path = fullfile(data_path, 'train_non_face_scenes'); %We can mine random or hard negatives from here
-test_scn_path = fullfile(data_path,'test_scenes/test_jpg'); %CMU+MIT test scenes
-% test_scn_path = fullfile(data_path,'extra_test_scenes'); %Bonus scenes
+%test_scn_path = fullfile(data_path,'test_scenes/test_jpg'); %CMU+MIT test scenes
+test_scn_path = fullfile(data_path,'extra_test_scenes'); %Bonus scenes
 label_path = fullfile(data_path,'test_scenes/ground_truth_bboxes.txt'); %the ground truth face locations in the test set
 
 %The faces are 36x36 pixels, which works fine as a template size. You could
@@ -125,7 +125,7 @@ imwrite(hog_template_image, 'visualizations/hog_template.png')
 % YOU CODE 'run_detector'. Make sure the outputs are properly structured!
 % They will be interpreted in Step 6 to evaluate and visualize your
 % results. See run_detector.m for more details.
-[bboxes, confidences, image_ids] = run_detector(test_scn_path, w, b, feature_params);
+[bboxes, confidences, image_ids] = run_detector(test_scn_path, w, b, feature_params,1);
 
 % run_detector will have (at least) two parameters which can heavily
 % influence performance -- how much to rescale each step of your multiscale
