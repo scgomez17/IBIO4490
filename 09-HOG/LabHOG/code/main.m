@@ -37,7 +37,7 @@
 % This should work on 32 and 64 bit versions of Windows, MacOS, and Linux
 close all
 %clear
-%crun('vlfeat-0.9.21/toolbox/vl_setup')
+run('vlfeat-0.9.21/toolbox/vl_setup')
 
 [~,~,~] = mkdir('visualizations');
 
