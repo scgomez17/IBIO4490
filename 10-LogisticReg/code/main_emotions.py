@@ -5,6 +5,7 @@
 
 #Import lybraries
 import os 
+import glob
 import zipfile 
 import urllib.request
 import numpy as np
@@ -16,6 +17,9 @@ from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import f1_score
 import timeit
 import pickle
+from PIL import Image
+from skimage import color
+from cv2 import cv2
 
 #Download and/or decompress of the database
 data_zip= os.path.isdir('fer2013.zip')
@@ -34,14 +38,6 @@ elif (data_zip==False and data_name==False):
 
 def sigmoid(x):
     return 1/(1+np.exp(-x))
-
-def softmax(x):
-    exps = np.exp(x)
-    return exps / np.sum(exps)
-
-#def stable_softmax(x):
-#    exps = np.exp(x - np.max(x))
-#    return exps / np.sum(exps)
 
 def get_data(em):
     # angry, disgust, fear, happy, sad, surprise, neutral
@@ -98,8 +94,6 @@ def get_data(em):
     print(x_val.shape[0], 'val samples')
     print(x_test.shape[0], 'test samples')
 
-    # plt.hist(y_train, max(y_train)+1); plt.show()
-    #return x_train, y_train, x_test, y_test
     return x_train, y_train, x_val, y_val, x_test, y_test
 
 class Model():
@@ -207,7 +201,6 @@ class Model():
         
 def train(model,em):
     x_train, y_train, x_val, y_val, _ , _  = get_data(em)
-    #x_train, y_train, x_test, y_test= get_data()
     batch_size = 50 # Change if you want
     epochs = 40000 # Change if you want
     Loss_train=[]
@@ -217,14 +210,12 @@ def train(model,em):
         for j in range(0,x_train.shape[0], batch_size):
             _x_train = x_train[j:j+batch_size]
             _y_train = y_train[j:j+batch_size]
-            out = model.forward(_x_train,8) #predictions
+            out = model.forward(_x_train,7) #predictions
             loss.append(model.compute_loss(out, _y_train))
             model.compute_gradient(_x_train, out, _y_train)
-        #out,loss_test= test(model)
-        out = model.forward(x_val) #Predictions 
+        out = model.forward(x_val,7) #Predictions 
         loss_val = model.compute_loss(out, y_val) 
-        print('Epoch {:6d}: train: {:.5f} | val: {:.5f}'.format(i, np.array(loss).mean(), loss_val))
-        #print('Epoch {:6d}: {:.5f} | val: {:.5f}'.format(i, np.array(loss).mean(), loss_test))        
+        print('Epoch {:6d}: train: {:.5f} | val: {:.5f}'.format(i, np.array(loss).mean(), loss_val))   
         Loss_train.append(np.array(loss).mean())
         Loss_x2.append(loss_val)
         if i==epochs-1:
@@ -235,7 +226,7 @@ def train(model,em):
             with open(b_multiclase, 'wb') as file:  
                 pickle.dump(model.b, file)
             plot(range(epochs), Loss_train, Loss_x2 , 'Val','multiclase '+str(em))
-        
+
 def plot(vector_x,train,vector_y2,plot_label,name): # Add arguments
     #vector_x2 --> val/test
     plt.plot(vector_x,train,label="train")   
@@ -248,7 +239,6 @@ def plot(vector_x,train,vector_y2,plot_label,name): # Add arguments
     plt.show()
     pass
 
-
 def test(model):
 
     prob= np.zeros([3589,7])
@@ -258,8 +248,6 @@ def test(model):
         out= sigmoid(out)
         for rows in range(len(out)):
             prob [rows,em]= out [rows]
-
-    #prob= softmax(prob)     
 
     for i in range (3589):
         label= np.where (prob[i,:] == max(prob[i,:]))
@@ -276,12 +264,51 @@ def test(model):
     ACA= accuracy_score(y_test,out)
     print('The ACA is {:.5f}'.format(ACA))
 
-    # YOU CODE HERE
-    # Show some qualitative results and the total accuracy for the whole test set
     pass
 
-def demo(model):
-    print ('sirvió')
+def listaAleatorios(n):
+    import random
+    lista = [0]  * n
+    for i in range(n):
+        lista[i] = random.randint(0, 21)
+    return lista
+
+
+def demo(model,w):
+    
+    if w== 'natural':
+        prob= np.zeros([22,7])
+        img_path= os.path.join('../Natural_Images','*.jpg')
+        img_path=glob.glob(img_path)
+        images= []
+        for number in range(len(img_path)):
+            images.append(cv2.imread(os.path.join(img_path[number])))
+            images[number]=cv2.resize(images[number],(48,48))
+            images[number] = color.rgb2gray(images[number])
+        
+        images = np.array(images)
+        images = images.astype('float64')
+
+        for em in range(7):
+            out = model.forward(images,em) #Predictions 
+            out= sigmoid(out)
+            for rows in range(len(out)):
+                prob [rows,em]= out [rows]
+        for i in range (22):
+            label= np.where (prob[i,:] == max(prob[i,:]))
+            out[i]= label[0]
+        count=0
+        for j in listaAleatorios(8):
+            plt.figure(1)
+            plt.subplot(2,4,count+1)
+            plt.imshow(images[j],'gray')
+            plt.axis('off')
+            props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+            plt.text(1,1,str(out[j]),fontsize=20,bbox=props)
+            if count == 7:
+                plt.show()
+            count=count+1
+    
 
 if __name__ == '__main__':
     import argparse
@@ -295,7 +322,9 @@ if __name__ == '__main__':
         test(model)    
     elif args.demo == True:
         model = Model()
-        demo(model)
+        #natural for show demo in natural images
+        #test for show demo with test images
+        demo(model,'natural')
     else:     
         tic= timeit.default_timer() 
         for em in range(8):
@@ -307,5 +336,6 @@ if __name__ == '__main__':
         args.test=True
         model = Model()
         test(model)
+
 
 
