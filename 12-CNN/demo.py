@@ -39,10 +39,11 @@ def demo ():
     faceCascade = cv2.CascadeClassifier(cascPath)
 
     plt.figure()
+    aux=0
     for i in AleatoryList(8):
 
         img = cv2.imread(images[i])
-        plt.subplot(2,4,i+1)
+        plt.subplot(2,4,aux+1)
         plt.imshow(img)
         plt.axis('off')
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)    
@@ -63,7 +64,8 @@ def demo ():
         ann= str(int(pred[0][0]))+','+str(int(pred[0][1]))+','+str(int(pred[0][2]))+','+str(int(pred[0][3]))+','+str(int(pred[0][4]))+','+str(int(pred[0][5])) +','+str(int(pred[0][6]))+','+str(int(pred[0][7]))+','+str(int(pred[0][8]))+','+str(int(pred[0][9]))
 
         props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-        plt.text(125,125,ann,fontsize=20,bbox=props)
+        plt.text(25,25,ann,fontsize=7,bbox=props)
+        aux += 1
     
     plt.savefig('Demo.png')
     plt.show()
