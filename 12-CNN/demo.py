@@ -22,18 +22,18 @@ import cv2
 def AleatoryList(n):
     lista = [0]  * n
     for i in range(n):
-        lista[i] = random.randint(0, 15000)
+        lista[i] = random.randint(0, 19960)
     return lista
 
 def demo ():
     
     model = model_celeb.Net().to(device)
-    model.load_state_dict(torch.load('model.pth','cpu'))
+    model.load_state_dict(torch.load('model.pth'))
     model.eval()
 
     img_path= os.path.join(path,'img_align_celeba','*.jpg')
     images=sorted(glob.glob(img_path))
-    images= images[182638:len(images)]
+    images= images[182637:len(images)]
     
     cascPath = "haarcascade_frontalface_default.xml"
     faceCascade = cv2.CascadeClassifier(cascPath)

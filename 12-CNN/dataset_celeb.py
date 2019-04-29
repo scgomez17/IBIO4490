@@ -20,9 +20,9 @@ class Data(Dataset):
             images= images[182638:len(images)]
         else:
             labels= labels[0:162770]
-            labels=labels[0:3000]
+            labels=labels[0:60000]
             images= images[0:162770]
-            images= images[0:3000]
+            images= images[0:60000]
             
         ind=0
         cascPath = "haarcascade_frontalface_default.xml"

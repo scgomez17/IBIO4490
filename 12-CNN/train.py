@@ -56,7 +56,7 @@ def train(epochs):
         print("Loss: %0.3f"%(np.mean(loss_cum)))
         print("Train Precision: %0.2f"%(float(train_precision/(len(train_dataset.image_files)*10))))
     
-    torch.save(model.state_dict(), 'model.pth')
+    torch.save(model.state_dict(), 'model_60k.pth')
 
 def test ():
     
@@ -64,12 +64,12 @@ def test ():
 
     img_path= os.path.join(path,'img_align_celeba','*.jpg')
     images=sorted(glob.glob(img_path))
-    images= images[182638:len(images)]
+    images= images[182637:len(images)]
     
     cascPath = "haarcascade_frontalface_default.xml"
     faceCascade = cv2.CascadeClassifier(cascPath)
 
-    f= open("predictions.txt", "w+")
+    f= open("predictions_60k.txt", "w+")
     for i in images:
         if path=='CelebA/':
             name= i.split('/')[2]
