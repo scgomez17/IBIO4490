@@ -28,7 +28,7 @@ def AleatoryList(n):
 def demo ():
     
     model = model_celeb.Net().to(device)
-    model.load_state_dict(torch.load('model.pth'))
+    model.load_state_dict(torch.load('model_60k.pth'))
     model.eval()
 
     img_path= os.path.join(path,'img_align_celeba','*.jpg')
